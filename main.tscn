@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://n8r7xuo12k42"]
+
+[ext_resource type="Script" path="res://MeshInstance3D.gd" id="1_38m7b"]
+[ext_resource type="Script" path="res://CameraFollow.gd" id="2_as5q1"]
+[ext_resource type="Texture2D" uid="uid://fwabxg48ibvv" path="res://icon.svg" id="2_d70m8"]
+[ext_resource type="Script" path="res://Ball.gd" id="2_k0clh"]
+[ext_resource type="Script" path="res://Label.gd" id="4_sheoe"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_sxdgk"]
+size = Vector3(100, 0.5, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nf2c0"]
+size = Vector3(100, 0.5, 100)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7yk3q"]
+radius = 0.3
+height = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j8u7x"]
+albedo_color = Color(1, 1, 0, 1)
+albedo_texture = ExtResource("2_d70m8")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_14nt4"]
+radius = 0.3
+
+[node name="Main" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_sxdgk")
+script = ExtResource("1_38m7b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_nf2c0")
+
+[node name="Ball" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mass = 10.0
+script = ExtResource("2_k0clh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ball"]
+mesh = SubResource("SphereMesh_7yk3q")
+surface_material_override/0 = SubResource("StandardMaterial3D_j8u7x")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ball"]
+shape = SubResource("SphereShape3D_14nt4")
+
+[node name="CameraFollow" type="Node3D" parent="Ball"]
+script = ExtResource("2_as5q1")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Ball/CameraFollow"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+spring_length = 5.0
+
+[node name="Camera3D" type="Camera3D" parent="Ball/CameraFollow/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 0, 0)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+light_indirect_energy = 4.048
+light_volumetric_fog_energy = 10.905
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Button" type="Button" parent="CanvasLayer"]
+offset_left = 1070.0
+offset_top = 614.0
+offset_right = 1149.0
+offset_bottom = 645.0
+text = "Calibrate"
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+visible = false
+offset_left = 2.0
+offset_top = 621.0
+offset_right = 82.0
+offset_bottom = 647.0
+text = "Calibrated"
+script = ExtResource("4_sheoe")
