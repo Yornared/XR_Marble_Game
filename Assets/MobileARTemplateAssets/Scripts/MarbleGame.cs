@@ -3,18 +3,19 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class MarbleGame : MonoBehaviour
 {
     [Header("Marble Settings")]
     public GameObject marblePrefab;
-    public float marbleSize = 0.03f; // Size of the marble (scale)
-    public float forceMultiplier = 5f; // Adjust this to control sensitivity
+    public float marbleSize = 0.03f;
+    public float forceMultiplier = 5f;
     public bool autoSpawnOnStart = true;
-    public float autoSpawnDelay = 1f; // Delay before auto-spawning marble
-    public float spawnHeight = 0.05f; // Height above the plane to spawn the marble
-    public int numberOfMarbles = 2; // Number of marbles to spawn
-    public Color[] marbleColors = new Color[2] { Color.red, Color.blue }; // Default colors for marbles
+    public float autoSpawnDelay = 1f;
+    public float spawnHeight = 0.05f;
+    public int numberOfMarbles = 3;
+    public Color[] marbleColors = new Color[3] { Color.red, Color.blue, Color.green };
     
     [Header("Physics Settings")]
     public float marbleMass = 1f;
@@ -34,7 +35,6 @@ public class MarbleGame : MonoBehaviour
 
     void Start()
     {
-        // If ARRaycastManager wasn't assigned, try to find it
         if (arRaycastManager == null)
         {
             arRaycastManager = FindAnyObjectByType<ARRaycastManager>();
@@ -99,6 +99,10 @@ public class MarbleGame : MonoBehaviour
 
     void Update()
     {
+        // Skip input processing if interacting with UI
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
+            
         // Process touch input
         ProcessTouchInput();
         
@@ -440,5 +444,75 @@ public class MarbleGame : MonoBehaviour
         // Set trail color to match marble color
         trail.startColor = marbleColor;
         trail.endColor = new Color(marbleColor.r, marbleColor.g, marbleColor.b, 0f); // Fade to transparent
+    }
+
+    /// <summary>
+    /// Updates properties of all existing marbles based on current settings.
+    /// Called by the debug panel when property values change.
+    /// </summary>
+    public void UpdateExistingMarbleProperties()
+    {
+        if (activeMarbles == null)
+            return;
+
+        foreach (GameObject marble in activeMarbles)
+        {
+            if (marble != null)
+            {
+                // Update size
+                marble.transform.localScale = new Vector3(marbleSize, marbleSize, marbleSize);
+                
+                // Update physics properties
+                Rigidbody rb = marble.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.mass = marbleMass;
+                }
+                
+                // Update collider material
+                SphereCollider collider = marble.GetComponent<SphereCollider>();
+                if (collider != null)
+                {
+                    PhysicsMaterial physMaterial = new PhysicsMaterial
+                    {
+                        dynamicFriction = dynamicFriction,
+                        staticFriction = staticFriction,
+                        bounciness = bounciness,
+                        frictionCombine = PhysicsMaterialCombine.Average,
+                        bounceCombine = PhysicsMaterialCombine.Average
+                    };
+                    collider.material = physMaterial;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Destroys all existing marbles and spawns new ones.
+    /// Called by the debug panel when the respawn button is pressed.
+    /// </summary>
+    public void RespawnAllMarbles()
+    {
+        // Clear existing marbles
+        foreach (GameObject marble in activeMarbles)
+        {
+            if (marble != null)
+            {
+                Destroy(marble);
+            }
+        }
+        
+        // Reset the list but keep its size
+        for (int i = 0; i < activeMarbles.Count; i++)
+        {
+            activeMarbles[i] = null;
+        }
+        
+        // Clear touch mappings
+        touchToMarbleMap.Clear();
+        touchStartPositions.Clear();
+        
+        // Spawn new marbles
+        SpawnInitialMarbles();
     }
 }
