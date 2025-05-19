@@ -468,16 +468,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   marbleGame: {fileID: 1153775412}
-  sizeSlider: {fileID: 0}
-  massSlider: {fileID: 0}
-  dynamicFrictionSlider: {fileID: 0}
-  staticFrictionSlider: {fileID: 0}
-  forceMultiplierSlider: {fileID: 0}
-  sizeValueText: {fileID: 0}
-  massValueText: {fileID: 0}
-  dynamicFrictionValueText: {fileID: 0}
-  staticFrictionValueText: {fileID: 0}
-  forceMultiplierValueText: {fileID: 0}
+  sizeSlider: {fileID: 1805974811}
+  massSlider: {fileID: 1267340659}
+  dynamicFrictionSlider: {fileID: 440122489}
+  staticFrictionSlider: {fileID: 1632243431}
+  forceMultiplierSlider: {fileID: 1550324162}
+  sizeValueText: {fileID: 1005628747}
+  massValueText: {fileID: 1876603652}
+  dynamicFrictionValueText: {fileID: 1203268}
+  staticFrictionValueText: {fileID: 1249788934}
+  forceMultiplierValueText: {fileID: 1251190394}
 --- !u!1 &54351087
 GameObject:
   m_ObjectHideFlags: 0
@@ -2963,6 +2963,7 @@ MonoBehaviour:
   staticFriction: 0.7
   bounciness: 0.5
   arRaycastManager: {fileID: 0}
+  inputEnabled: 0
 --- !u!4 &1153775413
 Transform:
   m_ObjectHideFlags: 0
@@ -5440,10 +5441,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1325813711}
   m_HandleRect: {fileID: 1601714681}
   m_Direction: 0
-  m_MinValue: 1
-  m_MaxValue: 100
-  m_WholeNumbers: 1
-  m_Value: 25
+  m_MinValue: 0.1
+  m_MaxValue: 10
+  m_WholeNumbers: 0
+  m_Value: 0.1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -6126,8 +6127,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1074183533}
   m_HandleRect: {fileID: 1074183532}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.9999999
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

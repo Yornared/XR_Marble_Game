@@ -112,29 +112,34 @@ public class SimpleMarbleControls : MonoBehaviour
     {
         marbleGame.marbleSize = value;
         UpdateValueText(sizeValueText, value, "F2");
+        marbleGame.UpdateExistingMarbleProperties();
     }
     
     void OnMassChanged(float value)
     {
         marbleGame.marbleMass = value;
         UpdateValueText(massValueText, value, "F1");
+        marbleGame.UpdateExistingMarbleProperties();
     }
     
     void OnDynamicFrictionChanged(float value)
     {
         marbleGame.dynamicFriction = value;
         UpdateValueText(dynamicFrictionValueText, value, "F2");
+        marbleGame.UpdateExistingMarbleProperties();
     }
     
     void OnStaticFrictionChanged(float value)
     {
         marbleGame.staticFriction = value;
         UpdateValueText(staticFrictionValueText, value, "F2");
+        marbleGame.UpdateExistingMarbleProperties();
     }
     
     void OnForceMultiplierChanged(float value)
     {
         marbleGame.forceMultiplier = value;
         UpdateValueText(forceMultiplierValueText, value, "F1");
+        marbleGame.UpdateExistingMarbleProperties();
     }
 }

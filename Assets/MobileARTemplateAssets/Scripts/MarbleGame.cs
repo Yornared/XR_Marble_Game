@@ -7,6 +7,13 @@ using UnityEngine.EventSystems;
 
 public class MarbleGame : MonoBehaviour
 {
+    // Input state enum to control marble game input
+    public enum InputState
+    {
+        Enabled,
+        Disabled
+    }
+    
     [Header("Marble Settings")]
     public GameObject marblePrefab;
     public float marbleSize = 0.03f;
@@ -26,6 +33,10 @@ public class MarbleGame : MonoBehaviour
     [Header("References")]
     [Tooltip("Optional: If not set, will try to find in the scene")]
     public ARRaycastManager arRaycastManager;
+    
+    [Header("Input Controls")]
+    [Tooltip("Controls whether input processing is enabled")]
+    public InputState inputEnabled = InputState.Enabled;
     
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
     private List<GameObject> activeMarbles = new List<GameObject>();
@@ -99,6 +110,10 @@ public class MarbleGame : MonoBehaviour
 
     void Update()
     {
+        // Skip input processing if input is disabled
+        if (inputEnabled == InputState.Disabled)
+            return;
+            
         // Skip input processing if interacting with UI
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             return;
